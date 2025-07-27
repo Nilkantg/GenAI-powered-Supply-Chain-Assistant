@@ -11,7 +11,7 @@ class Vector_loader(BaseModel):
     """It takes the vectors from embedding file"""
     vectors: Annotated[int, Field(description="The vector data from embedding file")]
 
-def vector_store(vectors: Vector_loader, persist_directory: str = "chroma_db"):
+def create_vector_store(vectors: Vector_loader, persist_directory: str = "chroma_db"):
     # Create or load a Chroma vector store with a persistence directory
     vectors_db = Chroma.from_documents(
         vectors.vectors,  # assuming vectors.vectors is a list of documents

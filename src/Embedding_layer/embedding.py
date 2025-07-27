@@ -10,9 +10,12 @@ load_dotenv()
 class DataLoader(BaseModel):
     """loads the splitted text from text_splitter"""
     text: Annotated[str, Field(description="The data that should be converted from text to embed vectors.")]
-    HF_TOKEN: Annotated[str, Field(description="Provide the HuggingFace API")]
+    HF_TOKEN: Optional[Annotated[str, Field(description="Provide the HuggingFace API")]]
 
 def embedding_(data: DataLoader):
+
+    if not data.HF_TOKEN:
+        data.HF_TOKEN = os.getenv("HF_TOKEN")
 
     embedding = HuggingFaceEmbeddings(
         model_name="sentence-transformers/all-MiniLM-L6-v2",

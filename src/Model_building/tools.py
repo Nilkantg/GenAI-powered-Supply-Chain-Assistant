@@ -5,6 +5,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain.prompts import ChatPromptTemplate
 from langchain.tools import StructuredTool
+from report_generator import generate_rag_report
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Annotated
 import os
@@ -67,26 +68,33 @@ def calculate_reorder_point(sku: str, safety_stock: int = 50) -> str:
 
     return f"Reorder point for SKU {sku}: {round(reorder_point, 2)} units"
 
+def tool_binding():
+    # Define tools
+    Tools = [
+        StructuredTool.from_function(
+            func=retrieve_data,
+            name="RetrieveData",
+            description="Retrieve specific fields for a given SKU from the dataset.",
+            args_schema=DataRetrievalInput
+        ),
+        StructuredTool.from_function(
+            func=calculate_eoq,
+            name="CalculateEOQ",
+            description="Calculate Economic Order Quantity (EOQ) for a given SKU using demand, ordering cost, and holding cost.",
+            args_schema=EOQInput
+        ),
+        StructuredTool.from_function(
+            func=calculate_reorder_point,
+            name="CalculateReorderPoint",
+            description="Calculate reorder point for a given SKU using demand, lead time, and safety stock.",
+            args_schema=ReorderPointInput
+        ),
+        StructuredTool.from_function(
+            func=generate_rag_report,
+            name="GenerateReport",
+            description="Generate a report based on the retrieved data and calculations."
+        )
+    ]
 
-# Define tools
-tools = [
-    StructuredTool.from_function(
-        func=retrieve_data,
-        name="RetrieveData",
-        description="Retrieve specific fields for a given SKU from the dataset.",
-        args_schema=DataRetrievalInput
-    ),
-    StructuredTool.from_function(
-        func=calculate_eoq,
-        name="CalculateEOQ",
-        description="Calculate Economic Order Quantity (EOQ) for a given SKU using demand, ordering cost, and holding cost.",
-        args_schema=EOQInput
-    ),
-    StructuredTool.from_function(
-        func=calculate_reorder_point,
-        name="CalculateReorderPoint",
-        description="Calculate reorder point for a given SKU using demand, lead time, and safety stock.",
-        args_schema=ReorderPointInput
-    )
-]
+    return Tools
 

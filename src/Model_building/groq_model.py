@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from langchain_groq import ChatGroq
 from langchain.memory import ConversationBufferMemory
+from langchain.vectorstores import Chroma
 from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain.prompts import ChatPromptTemplate
 from langchain.tools import StructuredTool
@@ -43,6 +44,19 @@ def build_model(model: Model) -> Dict[str, str]:
         input_key="query",
         output_key="response"
     )
+    # # Set the path relative to your Model_building folder
+    # persist_directory = "../Vector_Store_db/chroma_db"
+
+    # # Load the existing Chroma vector store
+    # vector_store = Chroma(persist_directory=persist_directory)
+
+    # Retrieve context from vector store if available
+    vector_store_search = ""
+    if model.vector_store is not None:
+        # Most vector stores have a 'similarity_search' method
+        docs = model.vector_store.similarity_search(model.query, k=3)
+        # Combine retrieved docs into a single string
+        vector_store_search = "\n".join([doc.page_content for doc in docs])
 
     # Create prompt template
     prompt = ChatPromptTemplate.from_messages([
@@ -62,17 +76,12 @@ def build_model(model: Model) -> Dict[str, str]:
         return_intermediate_steps=True
     )
 
-    # Perform vector store search for context (if vector_store is provided)
-    vector_store_search = ""
-    if model.vector_store:
-        search_results = model.vector_store.search(model.query, k=1)
-        vector_store_search = search_results[0][0] if search_results else ""
-
-    # Run the agent
+    # Run the agent, passing the retrieved context
     result = agent_executor.invoke({
         "query": model.query,
         "vector_store_search": vector_store_search
     })
 
-    return {"response": result["output"]}
+    # return {"response": result["output"]}
+    return result
 
