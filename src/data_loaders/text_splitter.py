@@ -6,31 +6,46 @@ import os
 import pydantic
 from typing import List, Dict, Literal, Any, Annotated, Optional
 from pydantic import BaseModel, Field 
+import logging
 
-class loaded_data(BaseModel):
+# Set up logging
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger(__name__)
+
+class LoadedData(BaseModel):
     """Model to represent the loaded data."""
     file_path: str = Field(..., description="Path to the data file.")
-    # data: pd.DataFrame = Field(..., description="The loaded DataFrame containing supply chain data.")
 
-def load_data(data: loaded_data) -> pd.DataFrame:
+def load_data(data: LoadedData) -> pd.DataFrame:
     """Load data from a CSV file."""
-    return pd.read_csv(loaded_data.file_path)
+    return pd.read_csv(data.file_path)
 
-class text_splitter(BaseModel):
+class TextSplitter(BaseModel):
     """Model to represent text splitting parameters."""
     chunk_size: int = Field(default=1000, description="Size of each text chunk.")
     chunk_overlap: int = Field(default=200, description="Overlap between chunks.")
     text: Annotated[str, Field(description="Text to be split into chunks.")]
 
-def text_splitter(text: text_splitter) -> List[str]:
+def split_text(params: TextSplitter) -> List[str]:
     """Split text into smaller chunks."""
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=text.chunk_size, 
-        chunk_overlap=text.chunk_overlap
+        chunk_size=params.chunk_size, 
+        chunk_overlap=params.chunk_overlap
     )
-    splitted_text = text_splitter.split_text(text)
+    return text_splitter.split_text(params.text)
 
-    return splitted_text
+# if __name__ == "__main__":
+#     # Example usage
+#     file_path = r'Datasets\Supply_data_1\supply_chain_forecast.csv'
+    
+#     # Create a LoadedData instance
+#     data = LoadedData(file_path=file_path)
+#     df = load_data(data)
+#     print(df.head())
 
-
+#     # Combine all columns into a single string
+#     text_content = " ".join(df.apply(lambda row: " ".join(row.astype(str)), axis=1))
+#     text_params = TextSplitter(text=text_content)
+#     chunks = split_text(text_params)
+#     print(chunks)
 

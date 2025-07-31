@@ -7,6 +7,7 @@ load_dotenv()
 class UserQueryInput(BaseModel):
     GROQ_API_KEY: Optional[Annotated[str, Field(..., description="Groq API key for authentication")]]
     HF_TOKEN: Optional[Annotated[str, Field(..., description="Hugging Face token for model access")]]
+    query: Annotated[str, Field(..., description="Enter your query: ")]
 
 def query_user_input(Query: UserQueryInput) -> str:
     """Process user input for generating a RAG report."""
@@ -16,9 +17,7 @@ def query_user_input(Query: UserQueryInput) -> str:
 
     if not Query.HF_TOKEN:
         Query.HF_TOKEN = os.getenv("HF_TOKEN")
-    
-    query = input("Enter your query: ")
 
-    return query
+    return Query.query, Query.GROQ_API_KEY, Query.HF_TOKEN
 
     

@@ -1,11 +1,11 @@
 import pandas as pd
-from data_loaders.text_splitter import load_data, text_splitter
-from Embedding_layer.embedding import embedding_
-from Vector_Store_db.vectorstore import create_vector_store
+from data_loaders.text_splitter import load_data, text_splitter, LoadedData, TextSplitter
+from Embedding_layer.embedding import embedding_, DataLoader
+from Vector_Store_db.vectorstore import create_vector_store, Vector_loader
 from Model_building.groq_model import build_model
 from Model_building.tools import tool_binding
 from Model_building.report_generator import generate_rag_report
-from user_query import query_user_input
+from user_query import query_user_input, UserQueryInput
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional, Annotated
 import os
@@ -19,17 +19,32 @@ def main():
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
     HF_TOKEN = os.getenv("HF_TOKEN")
 
-    path = pd.read_csv("Datasets/Supply_data_1/supply_chain_forecast.csv")
+    file_path = pd.read_csv("Datasets/Supply_data_1/supply_chain_forecast.csv")
 
-    data = load_data(path)
+    data = LoadedData(file_path=file_path)
 
-    text_documents = text_splitter(data)
+    data = load_data(data)
 
-    embedding_vectors = embedding_(text_documents)
+    text_content = " ".join(data.apply(lambda row: " ".join(row.astype(str)), axis=1))
 
-    vector_db = create_vector_store(embedding_vectors)
+    text_params = TextSplitter(text=text_content)
 
-    query_ = query_user_input()
+    text_documents = text_splitter(text_params)
+
+    documents_ = DataLoader(HF_TOKEN=HF_TOKEN, text=text_documents)
+
+    embedding_vectors = embedding_(documents_)
+
+    vectors_ = Vector_loader(vectors=embedding_vectors)
+
+    vector_db = create_vector_store(vectors_)
+
+    query = input("Enter your query: ")
+    if not query:
+        raise ValueError("Query cannot be empty.")
+    user_query = UserQueryInput(query=query)
+
+    query_ = query_user_input(user_query)
 
     agent_tools = tool_binding()
 
