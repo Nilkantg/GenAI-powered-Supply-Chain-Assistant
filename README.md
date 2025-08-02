@@ -28,31 +28,40 @@ Modular and Extensible: The project's structure is organized into separate compo
 - **Environment Management:** python-dotenv
 - **Programming language:** Python
 
-## Installation
-1) Clone the repository:
-https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git
+### Installation
 
-2) Set up a virtual environment:
--- python -m venv venv
--- source venv/bin/activate  # On Windows: venv\Scripts\activate
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git](https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git)
+    ```
+2.  **Set up a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-3) Install dependencies:
--- pip install -r requirements.txt
+### Configuration
 
-## Configuration:
-1) Create a .env file in the root directory of the project.
+1.  **Create a `.env` file** in the root directory of the project.
+2.  **Add your API keys to the file:**
+    ```
+    GROQ_API_KEY="your_groq_api_key_here"
+    HF_TOKEN="your_hugging_face_token_here"
+    ```
 
-2) Add your API keys to the file:
--- GROQ_API_KEY="your_groq_api_key_here"
--- HF_TOKEN="your_hugging_face_token_here"
+### Running the Application
 
-## Running the Application
-1) Initial Run:
-The first time you run the script, it will create and populate the ChromaDB vector store. This may take a few minutes.
--- command: python src/main.py
-
-2) Subsequent Runs:
-On all future runs, the script will detect the existing vector store and load it instantly, making the application much faster to start.
+1.  **Initial Run:**
+    The first time you run the script, it will create and populate the ChromaDB vector store. This may take a few minutes.
+    ```bash
+    python src/main.py
+    ```
+2.  **Subsequent Runs:**
+    On all future runs, the script will detect the existing vector store and load it instantly, making the application much faster to start.
 
 3) ### Using the Assistant
 
