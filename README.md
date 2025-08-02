@@ -91,7 +91,7 @@ GenAI-Powered-Supply-Chain-Assistant/
 │       └── supply_chain_forecast.csv
 ├── .env
 ├── README.md
-└── requirements.txt ```
+└── requirements.txt 
 
 🤝 Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
