@@ -13,8 +13,8 @@ Invokes specialized tools and RAG chains to retrieve information and perform cal
 # ✨ Features
 - **Intelligent Query Answering:** Ask natural language questions about your inventory, stock levels, and product-specific data.
 - **Tool-Based Calculations:** The agent can automatically use specialized tools to  calculate:
-    ```Economic Order Quantity (EOQ)
-    Reorder Points```
+    Economic Order Quantity (EOQ)
+    Reorder Points
 - **Automated Report Generation:** Generate detailed, well-formatted Markdown reports for any SKU, including data from the database and calculated metrics.
 - **Persistent Vector Store:** The system uses a ChromaDB vector store that is saved to disk, allowing for faster loading times on subsequent runs.
 - **Modular and Extensible:** The project's structure is organized into separate components (data loaders, embeddings, tools, models), making it easy to add new features or integrate different models.
