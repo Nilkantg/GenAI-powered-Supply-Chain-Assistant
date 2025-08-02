@@ -10,6 +10,9 @@ Creates a vector store for efficient semantic search.
 Utilizes a conversational agent to interpret user queries.
 Invokes specialized tools and RAG chains to retrieve information and perform calculations.
 
+# WORKFLOW
+You can have my workflow here: ![Workflow](Workflow2.png)
+
 # ✨ Features
 - **Intelligent Query Answering:** Ask natural language questions about your inventory, stock levels, and product-specific data.
 - **Tool-Based Calculations:** The agent can automatically use specialized tools to  calculate:
