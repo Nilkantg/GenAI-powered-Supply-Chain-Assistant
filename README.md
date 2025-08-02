@@ -20,42 +20,36 @@ Persistent Vector Store: The system uses a ChromaDB vector store that is saved t
 Modular and Extensible: The project's structure is organized into separate components (data loaders, embeddings, tools, models), making it easy to add new features or integrate different models.
 
 # 🛠️ Technology Stack
-Language Model: Groq (Gemma2-9b-It)
-Framework: LangChain
-Vector Store: ChromaDB
-Embeddings: HuggingFace sentence-transformers/all-MiniLM-L6-v2
-Data Handling: Pandas
-Environment Management: python-dotenv
-Programming language: Python
-
-🚀 Getting Started
-## Prerequisites
-Python 3.9 or later
-A Groq API Key
-A Hugging Face Hub API Token (for embeddings)
+- **Language Model:** Groq (Gemma2-9b-It)
+- **Framework:** LangChain
+- **Vector Store:** ChromaDB
+- **Embeddings:** HuggingFace sentence-transformers/all-MiniLM-L6-v2
+- **Data Handling:** Pandas
+- **Environment Management:** python-dotenv
+- **Programming language:** Python
 
 ## Installation
 1) Clone the repository:
 https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git
 
 2) Set up a virtual environment:
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+-- python -m venv venv
+-- source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 3) Install dependencies:
-pip install -r requirements.txt
+-- pip install -r requirements.txt
 
 ## Configuration:
 1) Create a .env file in the root directory of the project.
 
 2) Add your API keys to the file:
-GROQ_API_KEY="your_groq_api_key_here"
-HF_TOKEN="your_hugging_face_token_here"
+-- GROQ_API_KEY="your_groq_api_key_here"
+-- HF_TOKEN="your_hugging_face_token_here"
 
 ## Running the Application
 1) Initial Run:
 The first time you run the script, it will create and populate the ChromaDB vector store. This may take a few minutes.
-command: python src/main.py
+-- command: python src/main.py
 
 2) Subsequent Runs:
 On all future runs, the script will detect the existing vector store and load it instantly, making the application much faster to start.
@@ -64,8 +58,8 @@ On all future runs, the script will detect the existing vector store and load it
 
 When the script starts, it will prompt you to enter a query. You can ask a variety of questions:
 - **Simple Data Retrieval:** "What are the stock levels for SKU1?"
-- **Calculations:** "What is the EOQ for SKU02?"
-- **Report Generation:** "Generate a report for SKU03."
+- **Calculations:** "What is the EOQ for SKU2?"
+- **Report Generation:** "Generate a report for SKU3."
 
 The assistant will use its tools and knowledge base to provide a detailed and relevant response. If you ask for a report, a Markdown file will be generated and saved in the project's root directory.
 
