@@ -1,9 +1,15 @@
+# tools2.py
 import pandas as pd
 import numpy as np
 from langchain.tools import StructuredTool
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 from Model_building.report_generator import generate_rag_report
+from functools import partial # Added functools
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load dataset
 df = pd.read_csv('Datasets/Supply_data_1/supply_chain_forecast.csv')
@@ -20,6 +26,10 @@ class EOQInput(BaseModel):
 class ReorderPointInput(BaseModel):
     sku: str = Field(description="The SKU identifier for reorder point calculation")
     safety_stock: int = Field(description="Safety stock level (default: 50)", default=50)
+
+class ReportInput(BaseModel):
+    sku: str = Field(description="The SKU identifier for the report")
+    fields: Optional[List[str]] = Field(default=None, description="List of fields to include in the report")
 
 def retrieve_data(sku: str, fields: List[str]) -> str:
     """Retrieve specified fields for a given SKU from the dataset."""
@@ -69,8 +79,25 @@ def calculate_reorder_point(sku: str, safety_stock: int = 50) -> str:
     reorder_point = (daily_demand * lead_time) + safety_stock
     return f"Reorder point for SKU {sku}: {round(reorder_point, 2)} units"
 
-def tool_binding():
-    """Bind tools for the agent."""
+def generate_report_tool(sku: str, fields: Optional[List[str]] = None, groq_api_key: str = None, vector_store: object = None) -> str:
+    """Generate a comprehensive report for the specified SKU using RAG."""
+    # This tool acts as a bridge to your report_generator function
+    if not groq_api_key or not vector_store:
+        return "Error: Groq API key or vector store not provided to the report tool."
+
+    if fields is None:
+        fields = ["Stock levels", "Demand Forecast", "Lead times", "Order Quantities", "Costs", "Transportation modes"]
+
+    return generate_rag_report(sku, fields, groq_api_key, vector_store)
+
+def tool_binding(groq_api_key: str, vector_store: object):
+    """Bind tools for the agent, including the new report generator tool."""
+    report_generator_with_deps = partial(
+        generate_report_tool,
+        groq_api_key=groq_api_key,
+        vector_store=vector_store
+    )
+
     return [
         StructuredTool.from_function(
             func=retrieve_data,
@@ -89,5 +116,11 @@ def tool_binding():
             name="CalculateReorderPoint",
             description="Calculate reorder point for a given SKU using demand, lead time, and safety stock.",
             args_schema=ReorderPointInput
+        ),
+        StructuredTool.from_function(
+            func=report_generator_with_deps,
+            name="GenerateReport",
+            description="Generate a comprehensive markdown report for a given SKU. Takes an SKU and an optional list of fields.",
+            args_schema=ReportInput
         )
     ]
