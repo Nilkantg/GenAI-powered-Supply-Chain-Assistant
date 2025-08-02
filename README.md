@@ -11,13 +11,13 @@ Utilizes a conversational agent to interpret user queries.
 Invokes specialized tools and RAG chains to retrieve information and perform calculations.
 
 # ✨ Features
-Intelligent Query Answering: Ask natural language questions about your inventory, stock levels, and product-specific data.
-Tool-Based Calculations: The agent can automatically use specialized tools to calculate:
-Economic Order Quantity (EOQ)
-Reorder Points
-Automated Report Generation: Generate detailed, well-formatted Markdown reports for any SKU, including data from the database and calculated metrics.
-Persistent Vector Store: The system uses a ChromaDB vector store that is saved to disk, allowing for faster loading times on subsequent runs.
-Modular and Extensible: The project's structure is organized into separate components (data loaders, embeddings, tools, models), making it easy to add new features or integrate different models.
+1) **Intelligent Query Answering:** Ask natural language questions about your inventory, stock levels, and product-specific data.
+2) **Tool-Based Calculations:** The agent can automatically use specialized tools to  calculate:
+    ```Economic Order Quantity (EOQ)
+    Reorder Points```
+4) **Automated Report Generation:** Generate detailed, well-formatted Markdown reports for any SKU, including data from the database and calculated metrics.
+5) **Persistent Vector Store:** The system uses a ChromaDB vector store that is saved to disk, allowing for faster loading times on subsequent runs.
+6) **Modular and Extensible:** The project's structure is organized into separate components (data loaders, embeddings, tools, models), making it easy to add new features or integrate different models.
 
 # 🛠️ Technology Stack
 - **Language Model:** Groq (Gemma2-9b-It)
@@ -32,7 +32,7 @@ Modular and Extensible: The project's structure is organized into separate compo
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git](https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git)
+    git clone [https://github.com/Nilkantg/GenAI-powered-Supply-Chain-Assistant.git]
     ```
 2.  **Set up a virtual environment:**
     ```bash
