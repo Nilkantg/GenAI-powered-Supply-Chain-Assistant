@@ -60,16 +60,16 @@ command: python src/main.py
 2) Subsequent Runs:
 On all future runs, the script will detect the existing vector store and load it instantly, making the application much faster to start.
 
-3) Using the Assistant:
-When the script starts, it will prompt you to enter a query. You can ask a variety of questions:
+3) ### Using the Assistant
 
--- Simple Data Retrieval: "What are the stock levels for SKU1?"
--- Calculations: "What is the EOQ for SKU02?"
--- Report Generation: "Generate a report for SKU03."
+When the script starts, it will prompt you to enter a query. You can ask a variety of questions:
+- **Simple Data Retrieval:** "What are the stock levels for SKU1?"
+- **Calculations:** "What is the EOQ for SKU02?"
+- **Report Generation:** "Generate a report for SKU03."
 
 The assistant will use its tools and knowledge base to provide a detailed and relevant response. If you ask for a report, a Markdown file will be generated and saved in the project's root directory.
 
-📁 Project Structure
+```📁 Project Structure
 
 GenAI-Powered-Supply-Chain-Assistant/
 ├── src/
@@ -91,7 +91,7 @@ GenAI-Powered-Supply-Chain-Assistant/
 │       └── supply_chain_forecast.csv
 ├── .env
 ├── README.md
-└── requirements.txt
+└── requirements.txt ```
 
 🤝 Contributing
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
