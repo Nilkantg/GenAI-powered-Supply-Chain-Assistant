@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply Chain AI Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple animation for the loader */
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .loader {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4f46e5;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        /* Styling for the response box */
+        #response-box {
+            white-space: pre-wrap; /* Allows text to wrap and preserves line breaks */
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto px-4 py-8 md:py-16 max-w-3xl">
+
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Supply Chain AI Assistant</h1>
+            <p class="mt-3 text-lg text-gray-600">Ask me anything about your supply chain data!</p>
+        </header>
+
+        <!-- Query Form -->
+        <div class="bg-white p-6 rounded-2xl shadow-lg">
+            <form id="query-form">
+                <label for="query-input" class="block text-sm font-medium text-gray-700 mb-2">Your Question</label>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="query-input" name="query"
+                           class="flex-grow w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+                           placeholder="e.g., What is the stock level for SKU5?">
+                    <button type="submit" id="submit-button"
+                            class="bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-200 flex items-center justify-center">
+                        <span id="button-text">Ask AI</span>
+                        <div id="loader" class="loader hidden ml-3"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Response Section -->
+        <div id="response-container" class="mt-8 bg-white p-6 rounded-2xl shadow-lg hidden">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Answer</h2>
+            <div id="response-box" class="prose max-w-none text-gray-700 bg-gray-50 p-4 rounded-lg">
+                <!-- AI response will be injected here -->
+            </div>
+        </div>
+        
+        <!-- Example Queries -->
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3 text-center">Not sure what to ask? Try one of these:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-center">
+                <button class="example-query bg-gray-200/50 p-3 rounded-lg hover:bg-gray-200 transition">What is the stock for SKU2?</button>
+                <button class="example-query bg-gray-200/50 p-3 rounded-lg hover:bg-gray-200 transition">Calculate EOQ for SKU7</button>
+                <button class="example-query bg-gray-200/50 p-3 rounded-lg hover:bg-gray-200 transition">What is the reorder point for SKU4?</button>
+                <button class="example-query bg-gray-200/50 p-3 rounded-lg hover:bg-gray-200 transition">Retrieve the demand forecast for SKU9</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('query-form');
+            const input = document.getElementById('query-input');
+            const submitButton = document.getElementById('submit-button');
+            const buttonText = document.getElementById('button-text');
+            const loader = document.getElementById('loader');
+            const responseContainer = document.getElementById('response-container');
+            const responseBox = document.getElementById('response-box');
+            const exampleQueryButtons = document.querySelectorAll('.example-query');
+
+            // --- Event Listener for the main form ---
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const query = input.value.trim();
+                if (!query) {
+                    alert('Please enter a question.');
+                    return;
+                }
+                await fetchAndDisplayResponse(query);
+            });
+
+            // --- Event Listeners for example query buttons ---
+            exampleQueryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const query = button.textContent;
+                    input.value = query;
+                    // Automatically submit the form when an example is clicked
+                    fetchAndDisplayResponse(query);
+                });
+            });
+
+            // --- Function to handle the API call and display ---
+            async function fetchAndDisplayResponse(query) {
+                // Show loading state
+                buttonText.classList.add('hidden');
+                loader.classList.remove('hidden');
+                submitButton.disabled = true;
+                responseContainer.classList.add('hidden');
+
+                try {
+                    const res = await fetch('/api/query', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query: query }),
+                    });
+
+                    if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+                    }
+
+                    const data = await res.json();
+                    
+                    // Display response
+                    responseBox.textContent = data.response;
+                    responseContainer.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error('Error fetching response:', error);
+                    responseBox.textContent = `Error: ${error.message}`;
+                    responseContainer.classList.remove('hidden');
+                } finally {
+                    // Hide loading state
+                    buttonText.classList.remove('hidden');
+                    loader.classList.add('hidden');
+                    submitButton.disabled = false;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -6,35 +6,34 @@
 
 **Data Fields:**
 
-* **Average Daily Sales:** 4.805496036345893
+* **Average Daily Sales:** 4.805496036345893 
 * **Current Stock:** 26
 * **Safety Stock:** 5
-* **Reorder Level:** 871
-* **Maximum Stock:** 2686.505151567447
-* **Minimum Stock:** 5
+* **Reorder Point:** 
 * **Lead Time:** 3
-* **Supplier:** Carrier A
-* **Shipping Time:** 3.890547915870672
-* **Shipping Location:** Delhi
+* **Demand Forecast:** 871
+* **Economic Order Quantity (EOQ):** 
+* **Holding Cost per Unit:** $2
+* **Ordering Cost:** $50
+* **Carrier:** Carrier A
 * **Shipping Method:** Air
-* **Demand Forecast:** 923.4406317119222
+* **Destination:** Delhi
 * **Status:** Fail
-* **Unit Cost:** 3.145579522833002
-* **Total Inventory Value:** 923.4406317119222
+* **Last Updated:** 3.145579522833002
+* **Total Sales:** 923.4406317119222
 
-**Calculated Metrics:**
+**Calculations:**
 
 * **Economic Order Quantity (EOQ):** 
-   EOQ = sqrt((2 * 923.4406317119222 * 50) / 2) = **150.87**
+    * EOQ = sqrt((2 * 871 * 50) / 2) = **217.94** 
 * **Reorder Point:**
-   Reorder Point = (923.4406317119222 / 30) * 3 + 50 = **461.76 + 50 = 511.76** 
-
+    * daily_demand = 871 / 30 = 29.03
+    * Reorder Point = (29.03 * 3) + 50 = **117.09**
 
 **Recommendations:**
 
-*  The EOQ of 150.87 suggests that ordering this quantity would minimize inventory costs. 
-*  The reorder point of 511.76 indicates the inventory level at which a new order should be placed to avoid stockouts. 
-*  Investigate the reason for the "Fail" status and address any underlying issues impacting inventory management. 
+* Based on the calculated EOQ, it is recommended to order approximately 218 units of SKU4 each time to minimize inventory costs.
+* The reorder point of 117.09 units suggests that an order should be placed when the stock level reaches this point to avoid stockouts.
 
 
-
+**Note:** This report is based on the provided data and calculations. Further analysis and adjustments may be necessary based on specific business needs and market conditions. 
