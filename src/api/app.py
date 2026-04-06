@@ -14,7 +14,7 @@ sys.path.insert(0, SRC_PATH)
 warnings.filterwarnings("ignore")
 load_dotenv()
 
-# --- Import Your Custom Modules ---
+# --- Import our Custom Modules ---
 # These imports assume all your .py files are in the same directory as this app.py
 from data_loaders.text_splitter import load_data, LoadedData
 from Embedding_layer.embedding import embedding_, DataLoader
